@@ -12,54 +12,70 @@ import (
 
 var searchBufferMap = make(map[int]chan File)
 
-func InitSearchBuffers(keywords string) {
+func InitSearchBuffers() {
 	for i := 0; i < 5; i++ {
 		searchBufferMap[i] = make(chan File, 5000)
-		go processSearchBuffer(i, keywords)
+		go processSearchBuffer(i)
 	}
 }
 
-func processSearchBuffer(index int, keywords string) {
+func processSearchBuffer(index int) {
 	// log.Println("Starting search buffer nr:", index)
 	for {
-		WordSearch(<-searchBufferMap[index], keywords)
+		Search(<-searchBufferMap[index])
 	}
 }
 
-func WordSearch(v File, keywords string) {
+func Search(v File) {
 
 	stat, err := os.Stat(v.Name)
-	// if the file is 200mb or bigger, we continue
-	if stat.Size() > GlobalConfig.MaxFileSize*1000000 {
+	if err != nil {
+		log.Println("could not stat file", v.Name, err)
 		GlobalWaitGroup.Done()
 		return
+	}
+
+	// if the file is 200mb or bigger, we continue
+	if stat.Size() > RuntimeConfig.MaxFileSize*1000000 {
+		GlobalWaitGroup.Done()
+		return
+	}
+
+	// ...
+	for _, x := range RuntimeConfig.Ignore {
+		if strings.Contains(v.Name, x) {
+			GlobalWaitGroup.Done()
+			return
+		}
 	}
 
 	file, err := os.Open(v.Name)
 	if err != nil {
-		log.Println(err)
+		log.Println("Can not open file", v.Name, err)
 		GlobalWaitGroup.Done()
 		return
 	}
 
-	wordList := strings.Split(keywords, ",")
 	scanner := bufio.NewScanner(file)
 	var line string
 	var foundKeyword bool
 	lineNumber := 1
 	for scanner.Scan() {
 		line = scanner.Text()
-		for _, keyword := range wordList {
-			if strings.Contains(line, keyword) {
+		for _, c := range RuntimeConfig.ParsedConfigs {
+			if c.String != "" && strings.Contains(line, c.String) {
 				foundKeyword = true
 				v.Results.Hits[lineNumber] = line
 			}
 		}
+
 		lineNumber++
 	}
 	file.Close()
 
 	if foundKeyword {
+		// Do not add a waitgrouo done here because
+		// we are not done with the file yet.
 		printBufferMap[rand.Intn(len(printBufferMap))] <- v
 	} else {
 		GlobalWaitGroup.Done()
@@ -69,12 +85,6 @@ func WordSearch(v File, keywords string) {
 func WalkDirectories(dir string) {
 	_ = godirwalk.Walk(dir, &godirwalk.Options{
 		Callback: func(osPathname string, info *godirwalk.Dirent) error {
-
-			for _, v := range GlobalConfig.Ignore {
-				if strings.Contains(osPathname, v) {
-					return godirwalk.SkipThis
-				}
-			}
 
 			if !info.IsDir() {
 				GlobalWaitGroup.Add(1)
@@ -92,5 +102,4 @@ func WalkDirectories(dir string) {
 		Unsorted: true,
 	})
 
-	return
 }

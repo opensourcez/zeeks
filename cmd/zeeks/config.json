@@ -4,5 +4,9 @@
         ".exe",
         ".git"
     ],
-    "maxFileSize": 2
+    "maxFileSize": 2,
+    "configs": [
+        "drive",
+        "meow"
+    ]
 }

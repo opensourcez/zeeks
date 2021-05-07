@@ -5,8 +5,12 @@
 2. start on the most basic version (1. command example)
 
 
+# what to keep for later
+1. printing
+
 # what to change
-...
+2. Search function needs to take into account all configs.
+
 
 
 
@@ -17,7 +21,8 @@
 1.3 - we might want to be able to disable running strings
 2. we want to output the matches into their new files
 3. we want to output the strings return into files as well
-4. .. 
+4. clone the directory tree we are walking, this will give us an indication of which files we can access
+5. Inject into the cloned directory tree how many subdirectories or files a directory has. 
 
 
 # Formats
@@ -32,17 +37,18 @@
 {
     "configs":    
         [
-            "base64.conf",
-            "jwt.conf",
+            "base64",
+            "jwt",
         ],
     "ignore":[".exe",".gitignore","etc.."]
     "maxFileSize":1000,
+    "strings":true,
 }
 ```
 ## JSON search config
 ``` base64.conf
 {
-    "contains":"",
+    "string":"",
     "byte":0x10,
     "regexp":"",
     "strings":true, // default true
