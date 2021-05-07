@@ -1,4 +1,5 @@
 # ZEEKS
+A tool for searching for keywords, regexp and more inside of large directories. This tool is still a work in progress and anyone that wants to contribue can fork and PR.
 
 # todo
 1. analyzie the current project and find out where we need to change things
