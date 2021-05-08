@@ -33,13 +33,17 @@ func processFileBuffer(index int) {
 	for {
 		file = <-fileBufferMap[index]
 		dir, fn = filepath.Split(file.Name)
-		dir = strings.Replace(dir, "/..", "", -1)
+		dir = strings.Replace(dir, "../", "", -1)
 		err = os.MkdirAll(outDir+"/"+dir, 0777)
 		if err != nil {
 			GlobalWaitGroup.Done()
 			log.Println(err)
 			continue
 		}
+		// log.Println("saving file", outDir+"/"+dir+fn)
+		// log.Println(outDir)
+		// log.Println(dir)
+		// log.Println(fn)
 		cloneFile, err = os.OpenFile(outDir+"/"+dir+fn, os.O_RDWR|os.O_APPEND|os.O_CREATE, 0777)
 		if err != nil {
 			GlobalWaitGroup.Done()
