@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -32,6 +33,7 @@ func processFileBuffer(index int) {
 	for {
 		file = <-fileBufferMap[index]
 		dir, fn = filepath.Split(file.Name)
+		dir = strings.Replace(dir, "/..", "", -1)
 		err = os.MkdirAll(outDir+"/"+dir, 0777)
 		if err != nil {
 			GlobalWaitGroup.Done()
