@@ -1,9 +1,20 @@
 # ZEEKS
 A tool for searching for keywords, regexp and more inside of large directories. This tool is still a work in progress and anyone that wants to contribue can fork and PR.
 
+### Slow mode
+This tool has the ability to slowly walk directories in order not to spike network traffic on network mounted volumes. This option is meant to enabled a stealth sreach.
+
+
+# Notes
+1. Hex is actually string, use string search to find hex
+2. IP6REGXP: https://stackoverflow.com/questions/53497/regular-expression-that-matches-valid-ipv6-addresses
+
+
 # todo
-1. analyzie the current project and find out where we need to change things
-2. start on the most basic version (1. command example)
+3. SLOW MODE
+4. Create network drive and test if file is fetched more then once on multiple open.
+4.1. if file is not opened more then once, we can run all kinds of cli things on it. Even in slow mode.
+6. Run cli stuff like b64 on matches..
 
 
 # what to keep for later
@@ -11,6 +22,7 @@ A tool for searching for keywords, regexp and more inside of large directories. 
 
 # what to change
 2. Search function needs to take into account all configs.
+
 
 
 
@@ -28,8 +40,9 @@ A tool for searching for keywords, regexp and more inside of large directories. 
 
 # Formats
 ## Output files
-### strings file pattern
+### strings file pattern (MAYBE)
 - ./strings/[filename and path]
+### normal file pattern
 - ./data/[filename and path]
 
 # Config format
@@ -72,4 +85,5 @@ $ zeeks --config=[file].conf --regexp=[string] [directory]
 
 // no config
 $ zeeks --strings=disk --contains="meow" --regexp="" --bytes=0x10
-```
+```(15): 4. Create network drive and test if file is fetched more then once on multiple open.
+(87): $ zeeks --strings=disk --contains="meow" --regexp="" --bytes=0x10

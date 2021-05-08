@@ -8,6 +8,7 @@ import (
 
 var GlobalWaitGroup = sync.WaitGroup{}
 var RuntimeConfig *RunConfig
+var ArgMap = make(map[string]string)
 
 // File ...
 type File struct {
@@ -47,8 +48,8 @@ type SearchConfig struct {
 	Ignore      []string `json:"ignore"`
 	MaxFileSize int64    `json:"maxFileSize"`
 	String      string   `json:"string"`
-	Byte        byte     `json:"byte"`
-	Regexp      string   `json:"regexp"`
-	// runs the strings command on the file before searching
-	Strings bool `json:"strings"`
+	Bytes       []int    `json:"bytes"`
+	ByteSlice   []byte
+	Regexp      string `json:"regexp"`
+	Prefix      string `json:"prefix"`
 }

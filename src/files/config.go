@@ -7,11 +7,11 @@ import (
 	"os"
 )
 
-func LoadConfig(argMap map[string]string) {
+func LoadConfig() {
 
 	RuntimeConfig = new(RunConfig)
 
-	for i, v := range argMap {
+	for i, v := range ArgMap {
 		if i == "--config" {
 			file, err := os.Open(v)
 			if err != nil {
@@ -69,13 +69,19 @@ func LoadConfig(argMap map[string]string) {
 				log.Println("Could not read/parse the config file ...", err)
 				os.Exit(1)
 			}
+
+			for _, v := range NewConfig.Bytes {
+				NewConfig.ByteSlice = append(NewConfig.ByteSlice, byte(v))
+			}
 			RuntimeConfig.ParsedConfigs = append(RuntimeConfig.ParsedConfigs, NewConfig)
 			file.Close()
 		}
 	}
 
 	log.Println(RuntimeConfig)
-	log.Println(RuntimeConfig.ParsedConfigs[0])
+	for i, v := range RuntimeConfig.ParsedConfigs {
+		log.Println(i, v)
+	}
 	// user, err := user.Current()
 	// if err != nil {
 	// 	log.Fatalf(err.Error())

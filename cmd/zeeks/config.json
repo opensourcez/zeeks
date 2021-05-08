@@ -1,12 +1,19 @@
 {
     "ignore": [
         ".gitinore",
-        ".exe",
         ".git"
     ],
-    "maxFileSize": 2,
+    "maxFileSize": 1000,
     "configs": [
         "drive",
-        "meow"
+        "meow",
+        "0-byte",
+        "jwt",
+        "username",
+        "password",
+        "ssn",
+        "root",
+        "sudo",
+        "ip4"
     ]
 }
