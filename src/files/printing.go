@@ -2,7 +2,6 @@ package files
 
 import (
 	"fmt"
-	"strconv"
 
 	"github.com/fatih/color"
 )
@@ -25,7 +24,7 @@ func processPrintBuffer(index int) {
 		color.Green("FILE: " + file.Name)
 		for i, v := range file.Results.Hits {
 
-			fmt.Println(color.GreenString("("+strconv.Itoa(i)+"): ") + v)
+			fmt.Println(color.GreenString("("+i+"): ") + v)
 		}
 		GlobalWaitGroup.Done()
 	}

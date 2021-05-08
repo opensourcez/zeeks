@@ -4,7 +4,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -52,7 +51,7 @@ func processFileBuffer(index int) {
 		}
 
 		for i, v := range file.Results.Hits {
-			_, _ = cloneFile.WriteString("(" + strconv.Itoa(i) + "): " + v + "\n")
+			_, _ = cloneFile.WriteString("(" + i + "): " + v + "\n")
 		}
 		cloneFile.Close()
 		GlobalWaitGroup.Done()

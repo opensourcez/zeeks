@@ -21,7 +21,7 @@ type File struct {
 	Results SearchResults
 }
 type SearchResults struct {
-	Hits map[int]string
+	Hits map[string]string
 }
 
 // FullPath ...

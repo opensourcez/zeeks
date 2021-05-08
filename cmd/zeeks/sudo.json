@@ -1,3 +1,4 @@
 {
-    "string": "sudo"
+    "string": "sudo",
+    "prefix": "SUDO"
 }

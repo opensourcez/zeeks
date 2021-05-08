@@ -8,6 +8,7 @@ import (
 	"os"
 	"regexp"
 	"runtime/debug"
+	"strconv"
 	"strings"
 
 	"github.com/karrick/godirwalk"
@@ -92,13 +93,13 @@ func Search(v File) {
 		for _, c := range RuntimeConfig.ParsedConfigs {
 			if c.String != "" && strings.Contains(line, c.String) {
 				foundKeyword = true
-				v.Results.Hits[lineNumber] = line
+				v.Results.Hits[strconv.Itoa(lineNumber)+":"+c.Prefix] = line
 			}
 			if c.Regexp != "" {
 				match, err := regexp.MatchString(c.Regexp, line)
 				if match {
 					foundKeyword = true
-					v.Results.Hits[lineNumber] = line
+					v.Results.Hits[strconv.Itoa(lineNumber)+":"+c.Prefix] = line
 				} else if err != nil {
 					log.Println("REGEXP ERRR:", err)
 				}
@@ -108,7 +109,7 @@ func Search(v File) {
 			// }
 			if len(c.ByteSlice) > 0 && bytes.Contains(lineBytes, c.ByteSlice) {
 				foundKeyword = true
-				v.Results.Hits[lineNumber] = c.Prefix + line
+				v.Results.Hits[strconv.Itoa(lineNumber)+":"+c.Prefix] = line
 			}
 			//KRISTINN: ADD NEW CHECKS HERE
 		}
@@ -132,7 +133,7 @@ func WalkDirectories(dir string) {
 					Name:  osPathname,
 					IsDir: info.IsDir(),
 					Results: SearchResults{
-						Hits: make(map[int]string),
+						Hits: make(map[string]string),
 					},
 				}
 			}

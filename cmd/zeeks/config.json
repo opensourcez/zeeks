@@ -13,7 +13,6 @@
         "password",
         "ssn",
         "root",
-        "sudo",
-        "ip4"
+        "sudo"
     ]
 }

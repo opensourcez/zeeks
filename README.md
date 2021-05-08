@@ -11,6 +11,7 @@ This tool has the ability to slowly walk directories in order not to spike netwo
 
 
 # todo
+2. Enable multi matching on a single line.
 3. SLOW MODE
 4. Create network drive and test if file is fetched more then once on multiple open.
 4.1. if file is not opened more then once, we can run all kinds of cli things on it. Even in slow mode.
