@@ -3,9 +3,11 @@ package files
 import (
 	"bufio"
 	"bytes"
+	"fmt"
 	"log"
 	"math/rand"
 	"os"
+	"os/exec"
 	"regexp"
 	"runtime/debug"
 	"strconv"
@@ -44,6 +46,16 @@ func processSearchBuffer(index int) {
 		// TODO enable throttling for checks
 		Search(<-searchBufferMap[index])
 	}
+}
+
+func RunExec(command string, value string) string {
+	cmd := fmt.Sprintf(command, value)
+
+	out, err := exec.Command("bash", "-c", cmd).Output()
+	if err != nil {
+		return ""
+	}
+	return string(out)
 }
 
 func Search(v File) {
@@ -110,10 +122,31 @@ func Search(v File) {
 				v.Results.Hits[strconv.Itoa(lineNumber)+":"+c.Prefix] = line
 			}
 			if c.Regexp != "" {
-				match, err := regexp.MatchString(c.Regexp, line)
-				if match {
+				re := regexp.MustCompile(c.Regexp)
+				matches := re.FindAllString(line, -1)
+				if len(matches) > 0 {
+					if len(matches) == 1 {
+						match := matches[0]
+						if c.Exec != "" {
+							ret := RunExec(c.Exec, matches[0])
+							if ret != "" {
+								match += "    Exec out: (" + ret + ")"
+							}
+						}
+						v.Results.Hits[fmt.Sprintf("%d:%s", lineNumber, c.Prefix)] = match
+					} else {
+						for i := range matches {
+							match := matches[i]
+							if c.Exec != "" {
+								ret := RunExec(c.Exec, match)
+								if ret != "" {
+									match += "    Exec out: (" + ret + ")"
+								}
+							}
+							v.Results.Hits[fmt.Sprintf("%d(%d):%s", lineNumber, i, c.Prefix)] = match
+						}
+					}
 					foundKeyword = true
-					v.Results.Hits[strconv.Itoa(lineNumber)+":"+c.Prefix] = line
 				} else if err != nil {
 					log.Println("REGEXP ERRR:", err)
 				}
