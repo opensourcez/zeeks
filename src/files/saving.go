@@ -57,7 +57,7 @@ func processFileBuffer(index int) {
 		}
 
 		for _, v := range file.Results.Hits {
-			_, _ = cloneFile.WriteString(v + "\n")
+			_, _ = cloneFile.WriteString(v + "\n\n")
 		}
 		cloneFile.Close()
 		GlobalWaitGroup.Done()
