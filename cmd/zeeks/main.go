@@ -4,11 +4,26 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"runtime"
 	"strings"
 	"time"
 
 	"github.com/opensourcez/zeeks/src/files"
 )
+
+func main() {
+	runtime.GOMAXPROCS(runtime.NumCPU())
+	parseArguments(os.Args[1:])
+	files.LoadConfig()
+	rand.Seed(time.Now().UTC().UnixNano())
+	files.InitSearchBuffers()
+	// files.InitPrintBuffers()
+	files.InitFileBuffer()
+	files.WalkDirectories(files.ArgMap["--dir"])
+
+	// Wait group
+	files.GlobalWaitGroup.Wait()
+}
 
 func parseArguments(args []string) map[string]string {
 
@@ -28,28 +43,4 @@ func parseArguments(args []string) map[string]string {
 		os.Exit(1)
 	}
 	return files.ArgMap
-}
-
-func main() {
-	parseArguments(os.Args[1:])
-	files.LoadConfig()
-	rand.Seed(time.Now().UTC().UnixNano())
-	files.InitSearchBuffers()
-	// files.InitPrintBuffers()
-	files.InitFileBuffer()
-	files.WalkDirectories(files.ArgMap["--dir"])
-
-	// Wait group
-	files.GlobalWaitGroup.Wait()
-
-	// meow
-	// 123.123.123.123
-	// 23.123.123.123
-	// 123.23.123.123
-	// 123.123.3.123
-	// 123.23.123.123
-	// 123.123.123.1
-	// 00:15:5d:35:d6:3a
-	// 76:5f:71:8b:c1:3e
-
 }
