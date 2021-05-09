@@ -11,7 +11,6 @@ This tool has the ability to slowly walk directories in order not to spike netwo
 
 
 # todo
-2. Enable multi matching on a single line.
 3. SLOW MODE
 4. Create network drive and test if file is fetched more then once on multiple open.
 4.1. if file is not opened more then once, we can run all kinds of cli things on it. Even in slow mode.
@@ -38,37 +37,44 @@ This tool has the ability to slowly walk directories in order not to spike netwo
 4. clone the directory tree we are walking, this will give us an indication of which files we can access
 5. Inject into the cloned directory tree how many subdirectories or files a directory has. 
 
-
-# Formats
-## Output files
-### strings file pattern (MAYBE)
-- ./strings/[filename and path]
-### normal file pattern
-- ./data/[filename and path]
-
-# Config format
-## JSON runtime config
+# Config Format
+## JSON Runtime Config
 ``` base-and-token.conf
 {
+    // Search configs that will be used.
     "configs":    
         [
             "base64",
             "jwt",
         ],
+
+    // Files with these strings in the name will be ignore by the search
     "ignore":[".exe",".gitignore","etc.."]
+
+    // The maximum file size in megabytes
     "maxFileSize":1000,
-    "strings":true,
 }
 ```
-## JSON search config
+## JSON Search Config
 ``` base64.conf
 {
-    "string":"",
-    "byte":0x10,
-    "regexp":"",
-    "strings":true, // default true
+    // Searching for a string
+    "string":"string to search for",
+
+    // Searching for a byte sequence
+    "byte":[32,24,52,23,255,0],
+
+    // Matching with a regexp
+    "regexp":"\\beyJhbGciOi.*\\b",
+
+    // Files to ignore for this specific search
     "ignore":[".exe",".gitignore","etc.."]
+
+    // The maximum file size for this specific search
     "maxFileSize":1000,
+
+    // A prefix that will be added to each match, we recommend making it very descriptive so that you have an easier time understanding the results. 
+    "prefix": "SEARCH TAG"
 }
 ```
 
@@ -86,4 +92,9 @@ $ zeeks --config=[file].conf --regexp=[string] [directory]
 
 // no config
 $ zeeks --strings=disk --contains="meow" --regexp="" --bytes=0x10
+
+// Configuring search speed
+// --concurrent controls the number of files we can open at a time
+// --timeout control the time in MILLISECONDS each concurrent reader will wait between opening files
+$ zeeks --concurrent=10 --timeout=200 --config=[file].conf [directory]
 ```

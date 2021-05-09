@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -11,8 +12,13 @@ import (
 var fileBufferMap = make(map[int]chan File)
 
 func InitFileBuffer() {
-	for i := 0; i < 1; i++ {
-		fileBufferMap[i] = make(chan File, 50000)
+	number, err := strconv.Atoi(ArgMap["--concurrent"])
+	if err != nil {
+		log.Println("--concurrent needs to be a number")
+		os.Exit(1)
+	}
+	for i := 0; i < number; i++ {
+		fileBufferMap[i] = make(chan File, 100000)
 		go processFileBuffer(i)
 	}
 }
