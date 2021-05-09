@@ -1,5 +1,4 @@
 {
-    "regexp": "\\beyJhbGciOi.*\\b",
-    "prefix": "JWT",
-    "exec": "echo -n %s | cut -d \".\" -f 1,2 | base64 -d"
+    "string": "beyJhbGciOi",
+    "prefix": "JWT"
 }

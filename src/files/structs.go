@@ -21,7 +21,7 @@ type File struct {
 	Results SearchResults
 }
 type SearchResults struct {
-	Hits map[string]string
+	Hits []string
 }
 
 // FullPath ...
@@ -42,6 +42,7 @@ type RunConfig struct {
 	Configs       []string `json:"configs"`
 	Strings       bool     `json:"strings"`
 	ParsedConfigs []*SearchConfig
+	Parse         string `json:"parse"`
 }
 
 type SearchConfig struct {
@@ -52,5 +53,5 @@ type SearchConfig struct {
 	ByteSlice   []byte
 	Regexp      string `json:"regexp"`
 	Prefix      string `json:"prefix"`
-	Exec        string `json:"exec"`
+	Parse       string `json:"parse"`
 }

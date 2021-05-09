@@ -11,7 +11,6 @@ This tool has the ability to slowly walk directories in order not to spike netwo
 
 
 # todo
-3. SLOW MODE
 4. Create network drive and test if file is fetched more then once on multiple open.
 4.1. if file is not opened more then once, we can run all kinds of cli things on it. Even in slow mode.
 6. Run cli stuff like b64 on matches..
@@ -53,6 +52,9 @@ This tool has the ability to slowly walk directories in order not to spike netwo
 
     // The maximum file size in megabytes
     "maxFileSize":1000,
+
+     // Pre parse the file with a cli
+    "parse": "[tool name]"
 }
 ```
 ## JSON Search Config
@@ -75,8 +77,14 @@ This tool has the ability to slowly walk directories in order not to spike netwo
 
     // A prefix that will be added to each match, we recommend making it very descriptive so that you have an easier time understanding the results. 
     "prefix": "SEARCH TAG"
+
+    // Pre parse the file with a cli
+    "parse": "[tool name]"
 }
 ```
+# Available parsing tools
+ - strings
+ - hd
 
 # flags
 ```
