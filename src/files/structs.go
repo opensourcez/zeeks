@@ -52,4 +52,5 @@ type SearchConfig struct {
 	ByteSlice   []byte
 	Regexp      string `json:"regexp"`
 	Prefix      string `json:"prefix"`
+	Exec        string `json:"exec"`
 }
