@@ -24,7 +24,7 @@ func InitFileBuffer() {
 }
 
 func processFileBuffer(index int) {
-	// log.Println("Starting print buffer nr:", index)
+	log.Println("Starting print buffer nr:", index)
 	outDir, ok := ArgMap["--outputDir"]
 	if !ok {
 		outDir = time.Now().Format("01-02-06-15-04-05")
@@ -45,7 +45,7 @@ func processFileBuffer(index int) {
 			log.Println(err)
 			continue
 		}
-		// log.Println("saving file", outDir+"/"+dir+fn)
+		log.Println("saving file", outDir+"/"+dir+fn)
 		// log.Println(outDir)
 		// log.Println(dir)
 		// log.Println(fn)
@@ -56,8 +56,8 @@ func processFileBuffer(index int) {
 			continue
 		}
 
-		for i, v := range file.Results.Hits {
-			_, _ = cloneFile.WriteString("(" + i + "): " + v + "\n")
+		for _, v := range file.Results.Hits {
+			_, _ = cloneFile.WriteString(v + "\n")
 		}
 		cloneFile.Close()
 		GlobalWaitGroup.Done()
