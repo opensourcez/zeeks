@@ -3,6 +3,7 @@ package files
 import (
 	"bufio"
 	"bytes"
+	"fmt"
 	"log"
 	"math/rand"
 	"os"
@@ -11,7 +12,7 @@ import (
 	"runtime/debug"
 	"strconv"
 	"strings"
-	"fmt"
+	"time"
 
 	"github.com/karrick/godirwalk"
 )
@@ -19,16 +20,29 @@ import (
 var searchBufferMap = make(map[int]chan File)
 
 func InitSearchBuffers() {
+	number, err := strconv.Atoi(ArgMap["--concurrent"])
+	if err != nil {
+		log.Println("--concurrent needs to be a number")
+		os.Exit(1)
+	}
 	// TODO flag to control the number of file buffers
-	for i := 0; i < 5; i++ {
-		searchBufferMap[i] = make(chan File, 5000)
+	for i := 0; i < number; i++ {
+		log.Println("Strating concurrent buffer number:", i)
+		searchBufferMap[i] = make(chan File, 100000)
 		go processSearchBuffer(i)
 	}
 }
 
 func processSearchBuffer(index int) {
 	// log.Println("Starting search buffer nr:", index)
+
+	number, err := strconv.Atoi(ArgMap["--timeout"])
+	if err != nil {
+		log.Println("--timeout needs to be a number")
+		os.Exit(1)
+	}
 	for {
+		time.Sleep(time.Duration(number) * time.Millisecond)
 		// TODO enable throttling for checks
 		Search(<-searchBufferMap[index])
 	}
@@ -37,9 +51,9 @@ func processSearchBuffer(index int) {
 func RunExec(command string, value string) string {
 	cmd := fmt.Sprintf(command, value)
 
-	out, err := exec.Command("bash","-c",cmd).Output()
+	out, err := exec.Command("bash", "-c", cmd).Output()
 	if err != nil {
-			return ""
+		return ""
 	}
 	return string(out)
 }
@@ -113,19 +127,19 @@ func Search(v File) {
 				if len(matches) > 0 {
 					if len(matches) == 1 {
 						match := matches[0]
-						if c.Exec != ""{
+						if c.Exec != "" {
 							ret := RunExec(c.Exec, matches[0])
-							if ret != ""{
+							if ret != "" {
 								match += "    Exec out: (" + ret + ")"
 							}
 						}
 						v.Results.Hits[fmt.Sprintf("%d:%s", lineNumber, c.Prefix)] = match
-					}else{
-						for i := range(matches) {
+					} else {
+						for i := range matches {
 							match := matches[i]
-							if c.Exec != ""{
+							if c.Exec != "" {
 								ret := RunExec(c.Exec, match)
-								if ret != ""{
+								if ret != "" {
 									match += "    Exec out: (" + ret + ")"
 								}
 							}
