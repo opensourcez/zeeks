@@ -5,77 +5,83 @@ import (
 	"io"
 	"log"
 	"os"
+	"path/filepath"
 )
 
 func LoadConfig() {
 
 	RuntimeConfig = new(RunConfig)
+	configPath, ok := ArgMap["--config"]
+	if !ok {
+		log.Println("--config not specified")
+		os.Exit(1)
+	}
 
-	for i, v := range ArgMap {
-		if i == "--config" {
-			file, err := os.Open(v)
-			if err != nil {
-				log.Println("Could not open config file ...", err)
-				os.Exit(1)
-			}
+	var dir string
+	var fn string
+	dir, fn = filepath.Split(configPath)
+	log.Println("in config", dir, fn)
+	file, err := os.Open(configPath)
+	if err != nil {
+		log.Println("Could not open config file ...", err)
+		os.Exit(1)
+	}
 
-			bytes, err := io.ReadAll(file)
-			if err != nil {
-				file.Close()
-				log.Println("Could not read/parse the config file ...", err)
-				os.Exit(1)
-			}
-			NewConfig := new(RunConfig)
-			err = json.Unmarshal(bytes, NewConfig)
-			if err != nil {
-				file.Close()
-				log.Println("Could not read/parse the config file ...", err)
-				os.Exit(1)
-			}
-			if NewConfig.Configs != nil && len(NewConfig.Configs) > 0 {
-				RuntimeConfig = NewConfig
-			} else {
-				NewConfig := new(SearchConfig)
-				err = json.Unmarshal(bytes, NewConfig)
-				if err != nil {
-					file.Close()
-					log.Println("Could not read/parse the config file ...", err)
-					os.Exit(1)
-				}
-				RuntimeConfig.ParsedConfigs = append(RuntimeConfig.ParsedConfigs, NewConfig)
-			}
-
+	bytes, err := io.ReadAll(file)
+	if err != nil {
+		file.Close()
+		log.Println("Could not read/parse the config file ...", err)
+		os.Exit(1)
+	}
+	NewConfig := new(RunConfig)
+	err = json.Unmarshal(bytes, NewConfig)
+	if err != nil {
+		file.Close()
+		log.Println("Could not read/parse the config file ...", err)
+		os.Exit(1)
+	}
+	if NewConfig.Configs != nil && len(NewConfig.Configs) > 0 {
+		RuntimeConfig = NewConfig
+	} else {
+		NewConfig := new(SearchConfig)
+		err = json.Unmarshal(bytes, NewConfig)
+		if err != nil {
 			file.Close()
+			log.Println("Could not read/parse the config file ...", err)
+			os.Exit(1)
 		}
-		// parse all search configs
-		for _, v := range RuntimeConfig.Configs {
+		RuntimeConfig.ParsedConfigs = append(RuntimeConfig.ParsedConfigs, NewConfig)
+	}
 
-			file, err := os.Open(v + ".json")
-			if err != nil {
-				log.Println("Could not open config file ...", err)
-				os.Exit(1)
-			}
+	file.Close()
+	// parse all search configs
+	for _, v := range RuntimeConfig.Configs {
 
-			bytes, err := io.ReadAll(file)
-			if err != nil {
-				log.Println("Could not read/parse the config file ...", err)
-				file.Close()
-				os.Exit(1)
-			}
-			NewConfig := new(SearchConfig)
-			err = json.Unmarshal(bytes, NewConfig)
-			if err != nil {
-				file.Close()
-				log.Println("Could not read/parse the config file ...", err)
-				os.Exit(1)
-			}
+		file, err := os.Open(dir + v + ".json")
+		if err != nil {
+			log.Println("Could not open config file ...", err)
+			os.Exit(1)
+		}
 
-			for _, v := range NewConfig.Bytes {
-				NewConfig.ByteSlice = append(NewConfig.ByteSlice, byte(v))
-			}
-			RuntimeConfig.ParsedConfigs = append(RuntimeConfig.ParsedConfigs, NewConfig)
+		bytes, err := io.ReadAll(file)
+		if err != nil {
+			log.Println("Could not read/parse the config file ...", err)
 			file.Close()
+			os.Exit(1)
 		}
+		NewConfig := new(SearchConfig)
+		err = json.Unmarshal(bytes, NewConfig)
+		if err != nil {
+			file.Close()
+			log.Println("Could not read/parse the config file ...", err)
+			os.Exit(1)
+		}
+
+		for _, v := range NewConfig.Bytes {
+			NewConfig.ByteSlice = append(NewConfig.ByteSlice, byte(v))
+		}
+		RuntimeConfig.ParsedConfigs = append(RuntimeConfig.ParsedConfigs, NewConfig)
+		file.Close()
 	}
 
 	log.Println(RuntimeConfig)

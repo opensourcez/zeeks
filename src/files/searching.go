@@ -10,6 +10,7 @@ import (
 	"runtime/debug"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/karrick/godirwalk"
 )
@@ -17,16 +18,29 @@ import (
 var searchBufferMap = make(map[int]chan File)
 
 func InitSearchBuffers() {
+	number, err := strconv.Atoi(ArgMap["--concurrent"])
+	if err != nil {
+		log.Println("--concurrent needs to be a number")
+		os.Exit(1)
+	}
 	// TODO flag to control the number of file buffers
-	for i := 0; i < 5; i++ {
-		searchBufferMap[i] = make(chan File, 5000)
+	for i := 0; i < number; i++ {
+		log.Println("Strating concurrent buffer number:", i)
+		searchBufferMap[i] = make(chan File, 100000)
 		go processSearchBuffer(i)
 	}
 }
 
 func processSearchBuffer(index int) {
 	// log.Println("Starting search buffer nr:", index)
+
+	number, err := strconv.Atoi(ArgMap["--timeout"])
+	if err != nil {
+		log.Println("--timeout needs to be a number")
+		os.Exit(1)
+	}
 	for {
+		time.Sleep(time.Duration(number) * time.Millisecond)
 		// TODO enable throttling for checks
 		Search(<-searchBufferMap[index])
 	}

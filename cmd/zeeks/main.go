@@ -12,6 +12,7 @@ import (
 )
 
 func main() {
+
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	parseArguments(os.Args[1:])
 	files.LoadConfig()
