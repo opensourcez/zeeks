@@ -1,0 +1,4 @@
+{
+    "regexp": "QUl6Y[%a-zA-Z0-9+/]{47}",
+    "prefix": "GOOGLE_API_KEY_BASE64"
+}

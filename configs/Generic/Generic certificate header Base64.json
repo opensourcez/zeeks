@@ -1,0 +1,4 @@
+{
+    "regexp": "LS0tLS1CRUdJT[%a-zA-Z0-9+/]+={0,2}",
+    "prefix": "GENERIC_CERT_HEADER_BASE64"
+}

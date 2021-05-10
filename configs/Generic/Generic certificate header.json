@@ -1,0 +1,4 @@
+{
+    "regexp": "-----BEGIN .{3,100}-----",
+    "prefix": "GENERIC_CERT_HEADER"
+}

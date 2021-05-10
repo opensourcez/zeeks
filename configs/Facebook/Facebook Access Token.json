@@ -1,0 +1,4 @@
+{
+    "regexp": "EAACEdEose0cBA[0-9A-Za-z]+",
+    "prefix": "FACEBOOK_ACCESS_TOKEN"
+}

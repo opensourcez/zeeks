@@ -1,0 +1,4 @@
+{
+    "regexp": "(?i)heroku.{0,50}[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}",
+    "prefix": "HEROKU_API_KEY"
+}

@@ -1,0 +1,4 @@
+{
+    "regexp": "(?i)\\b(hack|hax|fix|oo+ps|fuck|ugly|todo|shit)\\b",
+    "prefix": "SUSPICIOUS_COMMENTS"
+}

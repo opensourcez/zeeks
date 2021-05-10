@@ -1,0 +1,4 @@
+{
+    "regexp": "access_token\\$production\\$[0-9a-z]{16}\\$[0-9a-f]{32}",
+    "prefix": "PAYPAL_BRAINTREE_TOKEN"
+}

@@ -1,0 +1,4 @@
+{
+    "string": "LS0tLS1CRUdJTiBFQyBQUklWQVRFIEtFWS0tLS0t[%a-zA-Z0-9+/]+={0,2}",
+    "prefix": "EC_PRIVATE_KEY_BASE64"
+}

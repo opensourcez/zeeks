@@ -1,0 +1,4 @@
+{
+    "regexp": "\\b(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9])\\.)+(com|org|net)\\b",
+    "prefix": "HOSTNAME"
+}

@@ -1,0 +1,4 @@
+{
+    "regexp": "(?i)twitter[^/]{0,50}[0-9a-zA-Z]{35,44}",
+    "prefix": "TWITTER_OAUTH"
+}

@@ -1,0 +1,4 @@
+{
+    "regexp": "(?i)(apikey|secret|key|api|password|pass|pw|host)=[0-9a-zA-Z-_.{}]{4,120}",
+    "prefix": "ENV_VAR"
+}
