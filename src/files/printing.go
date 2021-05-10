@@ -1,8 +1,6 @@
 package files
 
 import (
-	"fmt"
-
 	"github.com/fatih/color"
 )
 
@@ -22,10 +20,10 @@ func processPrintBuffer(index int) {
 		file = <-printBufferMap[index]
 		// log.Println("WE FOUND THE WORD IN FILE:", file.Name)
 		color.Green("FILE: " + file.Name)
-		for i, v := range file.Results.Hits {
+		// for i, v := range file.Results.Hits {
 
-			fmt.Println(color.GreenString("("+i+"): ") + v)
-		}
+		// 	fmt.Println(color.GreenString("("+i+"): ") + v)
+		// }
 		GlobalWaitGroup.Done()
 	}
 }

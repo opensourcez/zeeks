@@ -15,6 +15,19 @@ func main() {
 
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	parseArguments(os.Args[1:])
+
+	// set argument defaults
+	_, ok := files.ArgMap["--concurrent"]
+	if !ok {
+		files.ArgMap["--concurrent"] = "10"
+	}
+	_, ok = files.ArgMap["--timeout"]
+	if !ok {
+		files.ArgMap["--timeout"] = "0"
+	}
+
+	log.Println("Running with arg map:")
+	log.Println(files.ArgMap)
 	files.LoadConfig()
 	rand.Seed(time.Now().UTC().UnixNano())
 	files.InitSearchBuffers()

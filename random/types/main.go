@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	buf, _ := ioutil.ReadFile("zeeks")
+	buf, _ := ioutil.ReadFile("zeeks.exe")
 
 	kind, _ := filetype.Match(buf)
 	log.Println(kind)
