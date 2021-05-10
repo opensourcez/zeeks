@@ -1,4 +1,4 @@
 {
-    "regexp": "\\beyJhbGciOi.*\\b",
+    "string": "beyJhbGciOi",
     "prefix": "JWT"
 }
