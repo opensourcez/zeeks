@@ -71,7 +71,7 @@ func Search(v File) {
 			file.Close()
 		}
 		if readyToUnlock {
-			GlobalWaitGroup.Done()
+			// GlobalWaitGroup.Done()
 		}
 	}()
 
@@ -98,7 +98,7 @@ func Search(v File) {
 	// TODO.. detect binary file and open with strings to get output
 	// note: don't forget to disable the file open below if it's a binary..
 
-	var foundKeyword = false
+	// var foundKeyword = false
 	var preProcessing = make(map[string]string)
 	if RuntimeConfig.Parse != "" {
 		preProcessing[RuntimeConfig.Parse] = ""
@@ -120,7 +120,7 @@ func Search(v File) {
 			for _, x := range splitOut {
 				match := FindMatch(c, &v, 0, x, []byte(x), c.Parse)
 				if match {
-					foundKeyword = true
+					// foundKeyword = true
 				}
 			}
 		}
@@ -148,18 +148,18 @@ func Search(v File) {
 			}
 			match := FindMatch(c, &v, lineNumber, line, lineBytes, "file")
 			if match {
-				foundKeyword = true
+				// foundKeyword = true
 			}
 		}
 		lineNumber++
 	}
 
-	if foundKeyword {
-		log.Println("M:", len(v.Results.Hits), v.Name)
-		fileBufferMap[rand.Intn(len(fileBufferMap))] <- v
-	} else {
-		readyToUnlock = true
-	}
+	// if foundKeyword {
+	log.Println("M:", len(v.Results.Hits), v.Name)
+	fileBufferMap[rand.Intn(len(fileBufferMap))] <- v
+	// } else {
+	// 	readyToUnlock = true
+	// }
 }
 
 func FindMatch(c *SearchConfig, v *File, lineNumber int, line string, lineBytes []byte, extraPrefix string) bool {

@@ -45,7 +45,6 @@ func processFileBuffer(index int) {
 			log.Println(err)
 			continue
 		}
-		log.Println("saving file", outDir+"/"+dir+fn)
 		// log.Println(outDir)
 		// log.Println(dir)
 		// log.Println(fn)
