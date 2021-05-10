@@ -1,5 +1,4 @@
 {
     "string": "username",
-    "prefix": "USERNAME",
-    "parse": "strings"
+    "prefix": "USERNAME"
 }
