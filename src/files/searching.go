@@ -40,8 +40,9 @@ func processSearchBuffer(index int) {
 		log.Println("--timeout needs to be a number")
 		os.Exit(1)
 	}
+	duration := time.Duration(number / 2)
 	for {
-		time.Sleep(time.Duration(number) * time.Millisecond)
+		time.Sleep(duration * time.Millisecond)
 		// TODO enable throttling for checks
 		Search(<-searchBufferMap[index])
 	}
@@ -189,8 +190,17 @@ func FindMatch(c *SearchConfig, v *File, lineNumber int, line string, lineBytes 
 }
 
 func WalkDirectories(dir string) {
+
+	number, err := strconv.Atoi(ArgMap["--timeout"])
+	if err != nil {
+		log.Println("--timeout needs to be a number")
+		os.Exit(1)
+	}
+	duration := time.Duration(number)
+
 	_ = godirwalk.Walk(dir, &godirwalk.Options{
 		Callback: func(osPathname string, info *godirwalk.Dirent) error {
+			time.Sleep(duration * time.Millisecond)
 
 			if !info.IsDir() {
 				GlobalWaitGroup.Add(1)

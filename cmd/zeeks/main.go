@@ -26,6 +26,8 @@ func main() {
 		files.ArgMap["--timeout"] = "0"
 	}
 
+	log.Println("Running with arg map:")
+	log.Println(files.ArgMap)
 	files.LoadConfig()
 	rand.Seed(time.Now().UTC().UnixNano())
 	files.InitSearchBuffers()
