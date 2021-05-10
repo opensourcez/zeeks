@@ -126,6 +126,7 @@ func Search(v File) {
 		}
 	}
 
+	log.Println("O:", v.Name)
 	file, err = os.Open(v.Name)
 	if err != nil {
 		log.Println("Can not open file", v.Name, err)
@@ -153,12 +154,10 @@ func Search(v File) {
 		lineNumber++
 	}
 
-	log.Println(len(v.Results.Hits), foundKeyword)
 	if foundKeyword {
-		log.Println("..one to buffer")
+		log.Println("M:", len(v.Results.Hits), v.Name)
 		fileBufferMap[rand.Intn(len(fileBufferMap))] <- v
 	} else {
-		log.Println("unlocking..")
 		readyToUnlock = true
 	}
 }
