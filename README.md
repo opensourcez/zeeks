@@ -1,12 +1,15 @@
 # ZEEKS
 A tool for searching for keywords, regexp and more inside of large directories. This tool is still a work in progress and anyone that wants to contribue can fork and PR.
 
-### Slow mode
+## Slow mode
 This tool has the ability to slowly walk directories in order not to spike network traffic on network mounted volumes. This option is meant to enabled a stealth sreach.
 
+## Concurrency
+....
+
+## 
 
 # Notes
-1. Hex is actually string, use string search to find hex
 2. IP6REGXP: https://stackoverflow.com/questions/53497/regular-expression-that-matches-valid-ipv6-addresses
 
 
@@ -16,50 +19,39 @@ This tool has the ability to slowly walk directories in order not to spike netwo
 6. Run cli stuff like b64 on matches..
 7. move meta data to sqlite ? https://github.com/volatiletech/sqlboiler
 
-
-# what to keep for later
-1. printing
-
-# what to change
-2. Search function needs to take into account all configs.
-
-
-
-
-
-# What we want
-1. quickly parse a large number of files for word matching
-1.1. we also need to be able to apply regepx patterns instead of strings.contains
-1.2 - we might want to run strings on the file first, depending on the file type
-1.3 - we might want to be able to disable running strings
-2. we want to output the matches into their new files
-3. we want to output the strings return into files as well
-4. clone the directory tree we are walking, this will give us an indication of which files we can access
-5. Inject into the cloned directory tree how many subdirectories or files a directory has. 
-
 # Config Format
 ## JSON Runtime Config
-``` base-and-token.conf
+This is the main configuration file that will be referenced in the --config flag
+``` RUNTIME.conf
 {
     // Search configs that will be used.
+    // THESE CONFIGS SHOULD HAVE A RELATIVE PATH FROM THE CONFIG FILE
     "configs":    
         [
-            "base64",
+            "Example",
             "jwt",
         ],
 
     // Files with these strings in the name will be ignore by the search
-    "ignore":[".exe",".gitignore","etc.."]
+    "ignore":[".exe", ".gitignore", ".git", "etc...]
 
-    // The maximum file size in megabytes
+    // The maximum file size in MB
     "maxFileSize":1000,
+    
+    // If you want to search inside the local copy of the file when possible.
+    // This only works if the output path matches your previous searches
+    "preferLocalFiles": true,
 
-     // Pre parse the file with a cli
+     // Pre parse the file with a cli.
+     // This parsing step will REPLACE the normal step where the file is opened and read line by line.
+     // can run any tool from the command line that does not require arguments and outputs text
+     // f.x: strings, hd, etc..
     "parse": "[tool name]"
 }
 ```
 ## JSON Search Config
-``` base64.conf
+This kind of config file is a "search config" one or more of these configs can be listed in the MAIN config file which is shown above this example.
+``` Example.conf
 {
     // Searching for a string
     "string":"string to search for",
@@ -76,17 +68,13 @@ This tool has the ability to slowly walk directories in order not to spike netwo
     // The maximum file size for this specific search
     "maxFileSize":1000,
 
-    // A prefix that will be added to each match, we recommend making it very descriptive so that you have an easier time understanding the results. 
+    // A prefix that will be added to each match, we recommend making it short but descriptive.  
     "prefix": "SEARCH TAG"
 
-    // Pre parse the file with a cli
+    // SEE NOTES ABOUT PARSING IN THE MAIN CONFIG EXAMPLE ABOVE
     "parse": "[tool name]"
 }
 ```
-# Available parsing tools
- - strings
- - hd
-
 # flags
 ```
 // only config

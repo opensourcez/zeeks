@@ -25,6 +25,10 @@ func main() {
 	if !ok {
 		files.ArgMap["--timeout"] = "0"
 	}
+	_, ok = files.ArgMap["--outputDir"]
+	if !ok {
+		files.ArgMap["--outputDir"] = time.Now().Format("01-02-06")
+	}
 
 	log.Println("Running with arg map:")
 	log.Println(files.ArgMap)

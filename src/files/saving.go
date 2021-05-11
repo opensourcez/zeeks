@@ -7,7 +7,6 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-	"time"
 )
 
 var fileBufferMap = make(map[int]chan File)
@@ -31,7 +30,7 @@ func processFileBuffer(index int) {
 	var cloneFile *os.File
 	for {
 		file = <-fileBufferMap[index]
-		cloneFile = OpenFile(GetMatchPath(file.OutputPath))
+		cloneFile = OpenFile(GetMatchPath(file.OutputPath) + "-" + RUNTIME_START)
 		if cloneFile == nil {
 			continue
 		}
@@ -44,14 +43,12 @@ func processFileBuffer(index int) {
 }
 
 func MakePath(filePath string) string {
-	outDir, ok := ArgMap["--outputDir"]
-	if !ok {
-		outDir = time.Now().Format("01-02-06-15-04-05")
-	}
+	outDir := ArgMap["--outputDir"]
 	dir, fn := filepath.Split(filePath)
 	dir = strings.Replace(dir, "../", "", -1)
 	err := os.MkdirAll(outDir+"/"+dir, 0777)
 	if err != nil {
+		log.Println("err creating dir:", err, "R:", outDir+"/"+dir+fn)
 		return outDir + "/" + dir + fn
 	}
 	return outDir + "/" + dir + fn
@@ -61,7 +58,7 @@ func OpenFile(path string) (cloneFile *os.File) {
 	var err error
 	cloneFile, err = os.OpenFile(path, os.O_RDWR|os.O_APPEND|os.O_CREATE, 0777)
 	if err != nil {
-		log.Println(err)
+		log.Println("could not open file", err)
 		return nil
 	}
 	return

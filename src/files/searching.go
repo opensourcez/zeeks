@@ -79,14 +79,14 @@ func Process(v File) {
 		}
 	}()
 
-	stat, err := os.Stat(v.Name)
+	statFile, err := os.Stat(v.Name)
 	if err != nil {
 		log.Println("could not stat file", v.Name, err)
 		readyToUnlock = true
 		return
 	}
 
-	if stat.Size() > RuntimeConfig.MaxFileSize*1000000 {
+	if statFile.Size() > RuntimeConfig.MaxFileSize*1000000 {
 		readyToUnlock = true
 		return
 	}
@@ -98,26 +98,47 @@ func Process(v File) {
 		}
 	}
 
-	file, err = os.Open(v.Name)
-	if err != nil {
-		log.Println("Can not open file", v.Name, err)
-		readyToUnlock = true
-		return
-	}
-
 	v.OutputPath = MakePath(v.Name)
-	// log.Println(v.OutputPath)
+	// if local files are not prefered, then clear the current local file.
+	if !RuntimeConfig.PreferLocalFiles {
+		log.Println("removing:", v.OutputPath)
+		_ = os.Remove(v.OutputPath)
+		// Re-make the path to ensure it's existance
+		v.OutputPath = MakePath(v.Name)
+	}
+	log.Println("search..")
 	localFile = OpenFile(v.OutputPath)
 	if localFile == nil {
-		GlobalWaitGroup.Done()
+		// The aboce method handles all the error printing
+		// we exit here because this should never happen
 		os.Exit(1)
 	}
 
-	// Always make a local copy, even if we don't want to keep it
-	SaveFile(file, localFile)
-	// close both file to flush buffers
-	// closing the file is also important incase we are running pre processing
-	file.Close()
+	stat, statErr := localFile.Stat()
+	if statErr != nil {
+		log.Println("could not stat local file..", localFile.Name())
+		// we exit here because this should never happen
+		os.Exit(1)
+	}
+
+	if RuntimeConfig.PreferLocalFiles && stat.Size() == statFile.Size() {
+		log.Println("prefering local file:", localFile.Name())
+		// The entire file is already here, no need to open it from the remote drive.
+	} else {
+
+		file, err = os.Open(v.Name)
+		if err != nil {
+			log.Println("Can not open file", v.Name, err)
+			readyToUnlock = true
+			return
+		}
+		// Always make a local copy, even if we don't want to keep it
+		SaveFile(file, localFile)
+		// Close the remote file, it is not needed anymore
+		file.Close()
+	}
+
+	// Close the local file to flush all buffers
 	localFile.Close()
 
 	var foundKeyword = false
@@ -152,7 +173,7 @@ func Process(v File) {
 		}
 	}
 
-	// Open the local file again, we closed it incase we needed to do pre=processing
+	// Open the local file again, we closed it in case we needed to do pre=processing
 	localFile = OpenFile(v.OutputPath)
 	scanner := bufio.NewScanner(localFile)
 	var line string

@@ -10,6 +10,7 @@ var GlobalWaitGroup = sync.WaitGroup{}
 var RuntimeConfig *RunConfig
 var ArgMap = make(map[string]string)
 var MATCH_POSTFIX = "-matches"
+var RUNTIME_START = time.Now().Format("01-02-06-15-04-05")
 
 func GetMatchPath(originalPath string) string {
 	return originalPath + "-" + MATCH_POSTFIX
@@ -51,6 +52,7 @@ type RunConfig struct {
 	Parse            string `json:"parse"`
 	SaveAllFiles     bool   `json:"saveAllFiles"`
 	SaveMatchedFiles bool   `json:"saveMatchedFiles"`
+	PreferLocalFiles bool   `json:"preferLocalFiles"`
 }
 
 type SearchConfig struct {
