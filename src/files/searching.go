@@ -24,7 +24,6 @@ func InitSearchBuffers() {
 		log.Println("--concurrent needs to be a number")
 		os.Exit(1)
 	}
-	// TODO flag to control the number of file buffers
 	for i := 0; i < number; i++ {
 		log.Println("Strating concurrent buffer number:", i)
 		searchBufferMap[i] = make(chan File, 100000)
@@ -33,8 +32,6 @@ func InitSearchBuffers() {
 }
 
 func processSearchBuffer(index int) {
-	// log.Println("Starting search buffer nr:", index)
-
 	number, err := strconv.Atoi(ArgMap["--timeout"])
 	if err != nil {
 		log.Println("--timeout needs to be a number")
@@ -43,7 +40,6 @@ func processSearchBuffer(index int) {
 	duration := time.Duration(number / 2)
 	for {
 		time.Sleep(duration * time.Millisecond)
-		// TODO enable throttling for checks
 		Process(<-searchBufferMap[index])
 	}
 }
@@ -230,9 +226,7 @@ func FindMatch(c *SearchConfig, v *File, lineNumber int, line string, lineBytes 
 			return false
 		}
 	}
-	// if v.Name == "main.go" {
-	// 	// log.Println("searching:", c.Bytes, c.ByteSlice, lineBytes)
-	// }
+
 	if len(c.ByteSlice) > 0 && bytes.Contains(lineBytes, c.ByteSlice) {
 		v.Results.Hits = append(v.Results.Hits, finalPrefix+line)
 		return true
