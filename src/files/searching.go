@@ -129,7 +129,8 @@ func Process(v File) {
 		return
 	}
 
-	localFile := OpenFile(MakePath(v.Name))
+	v.OutputPath = MakePath(v.Name)
+	localFile := OpenFile(v.OutputPath)
 	if RuntimeConfig.SaveAllFiles {
 		SaveFile(file, localFile)
 	}

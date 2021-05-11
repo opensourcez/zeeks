@@ -31,7 +31,7 @@ func processFileBuffer(index int) {
 	var cloneFile *os.File
 	for {
 		file = <-fileBufferMap[index]
-		cloneFile = OpenFile(GetMatchPath(file.Name))
+		cloneFile = OpenFile(GetMatchPath(file.OutputPath))
 		if cloneFile == nil {
 			continue
 		}

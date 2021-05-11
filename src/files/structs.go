@@ -17,13 +17,14 @@ func GetMatchPath(originalPath string) string {
 
 // File ...
 type File struct {
-	Name    string
-	Dir     string
-	IsDir   bool
-	ModTime time.Time
-	Mode    string
-	Size    int64
-	Results SearchResults
+	Name       string
+	OutputPath string
+	Dir        string
+	IsDir      bool
+	ModTime    time.Time
+	Mode       string
+	Size       int64
+	Results    SearchResults
 }
 type SearchResults struct {
 	Hits []string
