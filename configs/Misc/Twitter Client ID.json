@@ -1,0 +1,4 @@
+{
+    "regexp": "(?i)twitter(.{0,20})?['\"][0-9a-z]{18,25}['\"]",
+    "prefix": "TWITTER_CLIENT_ID"
+}

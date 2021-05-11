@@ -1,0 +1,4 @@
+{
+    "regexp": "(QTNU|QUtJQ|QUdQQ|QUlEQ|QVJPQ|QUlQQ|QU5QQ|QU5WQ|QVNJQ)[%a-zA-Z0-9+/]{20,24}={0,2}",
+    "prefix": "AWS_ACCESS_KEY_ID_VALUE_BASE64"
+}

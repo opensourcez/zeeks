@@ -1,0 +1,4 @@
+{
+    "string": "LS0tLS1CRUdJTiBQR1AgUFJJVkFURSBLRVkgQkxPQ0stLS0tL[%a-zA-Z0-9+/]+={0,2}",
+    "prefix": "PGP_PRIVATE_KEY_BASE64"
+}

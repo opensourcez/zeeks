@@ -1,0 +1,4 @@
+{
+    "regexp": "(?i)facebook[^/]{0,50}(\\\"|'|`)?[0-9a-f]{32}(\\\"|'|`)?",
+    "prefix": "FACEBOOK_OAUTH"
+}

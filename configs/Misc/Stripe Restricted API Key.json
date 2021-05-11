@@ -1,0 +1,4 @@
+{
+    "regexp": "rk_live_[0-9a-zA-Z]{24}",
+    "prefix": "STRIPE_RESTRICTED_API_KEY"
+}

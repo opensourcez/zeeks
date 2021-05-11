@@ -1,0 +1,4 @@
+{
+    "regexp": "(?i)(facebook|fb)(.{0,20})?['\"][0-9]{13,17}['\"]",
+    "prefix": "FACEBOOK_CLIENT_ID"
+}

@@ -1,0 +1,4 @@
+{
+    "regexp": "(aHR0cD|aHR0cHM6)[%a-zA-Z0-9+/]+={0,2}",
+    "prefix": "URL_BASE64"
+}

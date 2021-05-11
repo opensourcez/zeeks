@@ -1,0 +1,4 @@
+{
+    "regexp": "SK[0-9a-fA-F]{32}",
+    "prefix": "TWILIO_API_KEY"
+}

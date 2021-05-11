@@ -1,0 +1,4 @@
+{
+    "regexp": "(?i)artifactory.{0,50}(\\\"|'|`)?[a-zA-Z0-9=]{112}(\\\"|'|`)?",
+    "prefix": "ARTIFACTORY"
+}

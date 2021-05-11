@@ -1,0 +1,4 @@
+{
+    "regexp": "(?i)codeclima.{0,50}(\\\"|'|`)?[0-9a-f]{64}(\\\"|'|`)?",
+    "prefix": "CODECLIMATE"
+}

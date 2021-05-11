@@ -1,0 +1,4 @@
+{
+    "regexp": "sq0atp-[0-9A-Za-z\\-_]{22}",
+    "prefix": "SQUARE_ACCESS_TOKEN"
+}

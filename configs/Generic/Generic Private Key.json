@@ -1,0 +1,4 @@
+{
+    "regexp": "-----BEGIN [ A-Za-z0-9]*PRIVATE KEY[ A-Za-z0-9]*-----",
+    "prefix": "GENERIC_PRIVATE_KEY"
+}

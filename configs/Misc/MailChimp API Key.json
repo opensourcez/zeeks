@@ -1,0 +1,4 @@
+{
+    "regexp": "[0-9a-f]{32}-us[0-9]{1,2}",
+    "prefix": "MAILCHIMP_API_KEY"
+}

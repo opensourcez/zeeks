@@ -1,0 +1,4 @@
+{
+    "regexp": "RUFBQ0VkRW9zZTBjQk[%a-zA-Z0-9+/]+={0,2}",
+    "prefix": "FACEBOOK_ACCESS_TOKEN_BASE64"
+}

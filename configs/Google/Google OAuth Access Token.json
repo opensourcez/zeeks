@@ -1,0 +1,4 @@
+{
+    "regexp": "ya29\\.[0-9A-Za-z\\-_]+",
+    "prefix": "GOOGLE_OAUTH_ACCESS_TOKEN"
+}

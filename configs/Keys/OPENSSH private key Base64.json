@@ -1,0 +1,4 @@
+{
+    "string": "LS0tLS1CRUdJTiBPUEVOU1NIIFBSSVZBVEUgS0VZLS0tLS[%a-zA-Z0-9+/]+={0,2}",
+    "prefix": "OPENSSH_PRIVATE_KEY_BASE64"
+}
