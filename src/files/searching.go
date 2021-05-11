@@ -106,7 +106,6 @@ func Process(v File) {
 		// Re-make the path to ensure it's existance
 		v.OutputPath = MakePath(v.Name)
 	}
-	log.Println("search..")
 	localFile = OpenFile(v.OutputPath)
 	if localFile == nil {
 		// The aboce method handles all the error printing
@@ -125,7 +124,6 @@ func Process(v File) {
 		log.Println("prefering local file:", localFile.Name())
 		// The entire file is already here, no need to open it from the remote drive.
 	} else {
-
 		file, err = os.Open(v.Name)
 		if err != nil {
 			log.Println("Can not open file", v.Name, err)
