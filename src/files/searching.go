@@ -58,6 +58,7 @@ func RunExec(cmd string, value string) string {
 
 func Process(v File) {
 	var file *os.File
+	var localFile *os.File
 	var readyToUnlock bool
 	defer func() {
 		if r := recover(); r != nil {
@@ -69,6 +70,9 @@ func Process(v File) {
 		}
 		if file != nil {
 			file.Close()
+		}
+		if localFile != nil {
+			localFile.Close()
 		}
 		if readyToUnlock {
 			GlobalWaitGroup.Done()
@@ -94,11 +98,37 @@ func Process(v File) {
 		}
 	}
 
+	file, err = os.Open(v.Name)
+	if err != nil {
+		log.Println("Can not open file", v.Name, err)
+		readyToUnlock = true
+		return
+	}
+
+	v.OutputPath = MakePath(v.Name)
+	// log.Println(v.OutputPath)
+	localFile = OpenFile(v.OutputPath)
+	if localFile == nil {
+		GlobalWaitGroup.Done()
+		os.Exit(1)
+	}
+
+	// Always make a local copy, even if we don't want to keep it
+	SaveFile(file, localFile)
+	// close both file to flush buffers
+	// closing the file is also important incase we are running pre processing
+	file.Close()
+	localFile.Close()
+
 	var foundKeyword = false
 	var preProcessing = make(map[string]string)
+
+	// Add the global parse setting
 	if RuntimeConfig.Parse != "" {
 		preProcessing[RuntimeConfig.Parse] = ""
 	}
+
+	// Add per file parsing settings
 	for _, c := range RuntimeConfig.ParsedConfigs {
 		if c.Parse != "" {
 			preProcessing[c.Parse] = ""
@@ -106,7 +136,7 @@ func Process(v File) {
 	}
 
 	for i, _ := range preProcessing {
-		out := RunExec(i, v.Name)
+		out := RunExec(i, v.OutputPath)
 		preProcessing[i] = out
 	}
 
@@ -122,23 +152,13 @@ func Process(v File) {
 		}
 	}
 
-	file, err = os.Open(v.Name)
-	if err != nil {
-		log.Println("Can not open file", v.Name, err)
-		readyToUnlock = true
-		return
-	}
-
-	v.OutputPath = MakePath(v.Name)
-	localFile := OpenFile(v.OutputPath)
-	if RuntimeConfig.SaveAllFiles {
-		SaveFile(file, localFile)
-	}
-
-	scanner := bufio.NewScanner(file)
+	// Open the local file again, we closed it incase we needed to do pre=processing
+	localFile = OpenFile(v.OutputPath)
+	scanner := bufio.NewScanner(localFile)
 	var line string
 	var lineBytes []byte
 	lineNumber := 1
+
 	for scanner.Scan() {
 		line = scanner.Text()
 		lineBytes = scanner.Bytes()
@@ -150,15 +170,25 @@ func Process(v File) {
 			if match {
 				foundKeyword = true
 			}
+
 		}
 		lineNumber++
 	}
 
-	if foundKeyword {
-		if RuntimeConfig.SaveMatchedFiles && !RuntimeConfig.SaveAllFiles {
-			SaveFile(file, localFile)
+	// Cleaning up files incase we don't want them to be saved locally
+	if !RuntimeConfig.SaveMatchedFiles && !RuntimeConfig.SaveAllFiles {
+		err = os.Remove(localFile.Name())
+		if err != nil {
+			log.Println(err)
 		}
+	} else if !foundKeyword && !RuntimeConfig.SaveAllFiles {
+		err = os.Remove(localFile.Name())
+		if err != nil {
+			log.Println(err)
+		}
+	}
 
+	if foundKeyword {
 		fileBufferMap[rand.Intn(len(fileBufferMap))] <- v
 	} else {
 		readyToUnlock = true
@@ -206,7 +236,6 @@ func WalkDirectories(dir string) {
 
 			if !info.IsDir() {
 				GlobalWaitGroup.Add(1)
-
 				searchBufferMap[rand.Intn(len(searchBufferMap))] <- File{
 					Name:    osPathname,
 					IsDir:   info.IsDir(),

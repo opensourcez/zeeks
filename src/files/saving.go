@@ -52,9 +52,7 @@ func MakePath(filePath string) string {
 	dir = strings.Replace(dir, "../", "", -1)
 	err := os.MkdirAll(outDir+"/"+dir, 0777)
 	if err != nil {
-		GlobalWaitGroup.Done()
-		log.Println(err)
-		return ""
+		return outDir + "/" + dir + fn
 	}
 	return outDir + "/" + dir + fn
 }
@@ -63,7 +61,6 @@ func OpenFile(path string) (cloneFile *os.File) {
 	var err error
 	cloneFile, err = os.OpenFile(path, os.O_RDWR|os.O_APPEND|os.O_CREATE, 0777)
 	if err != nil {
-		GlobalWaitGroup.Done()
 		log.Println(err)
 		return nil
 	}
