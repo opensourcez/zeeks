@@ -19,12 +19,8 @@ import (
 var searchBufferMap = make(map[int]chan File)
 
 func InitSearchBuffers() {
-	number, err := strconv.Atoi(ArgMap["--concurrent"])
-	if err != nil {
-		log.Println("--concurrent needs to be a number")
-		os.Exit(1)
-	}
-	for i := 0; i < number; i++ {
+
+	for i := 0; i < RuntimeConfig.Buffers; i++ {
 		log.Println("Strating concurrent buffer number:", i)
 		searchBufferMap[i] = make(chan File, 100000)
 		go processSearchBuffer(i)
@@ -32,12 +28,7 @@ func InitSearchBuffers() {
 }
 
 func processSearchBuffer(index int) {
-	number, err := strconv.Atoi(ArgMap["--timeout"])
-	if err != nil {
-		log.Println("--timeout needs to be a number")
-		os.Exit(1)
-	}
-	duration := time.Duration(number / 2)
+	duration := time.Duration(RuntimeConfig.Timeout / 2)
 	for {
 		time.Sleep(duration * time.Millisecond)
 		Process(<-searchBufferMap[index])
@@ -236,12 +227,7 @@ func FindMatch(c *SearchConfig, v *File, lineNumber int, line string, lineBytes 
 
 func WalkDirectories(dir string) {
 
-	number, err := strconv.Atoi(ArgMap["--timeout"])
-	if err != nil {
-		log.Println("--timeout needs to be a number")
-		os.Exit(1)
-	}
-	duration := time.Duration(number)
+	duration := time.Duration(RuntimeConfig.Timeout)
 
 	_ = godirwalk.Walk(dir, &godirwalk.Options{
 		Callback: func(osPathname string, info *godirwalk.Dirent) error {

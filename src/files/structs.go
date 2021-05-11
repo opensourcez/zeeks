@@ -53,6 +53,8 @@ type RunConfig struct {
 	SaveAllFiles     bool   `json:"saveAllFiles"`
 	SaveMatchedFiles bool   `json:"saveMatchedFiles"`
 	PreferLocalFiles bool   `json:"preferLocalFiles"`
+	Buffers          int    `json:"buffers"`
+	Timeout          int    `json:"timeout"`
 }
 
 type SearchConfig struct {

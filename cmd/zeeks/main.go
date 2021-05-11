@@ -17,15 +17,7 @@ func main() {
 	parseArguments(os.Args[1:])
 
 	// set argument defaults
-	_, ok := files.ArgMap["--concurrent"]
-	if !ok {
-		files.ArgMap["--concurrent"] = "10"
-	}
-	_, ok = files.ArgMap["--timeout"]
-	if !ok {
-		files.ArgMap["--timeout"] = "0"
-	}
-	_, ok = files.ArgMap["--outputDir"]
+	_, ok := files.ArgMap["--outputDir"]
 	if !ok {
 		files.ArgMap["--outputDir"] = time.Now().Format("01-02-06")
 	}
@@ -33,6 +25,12 @@ func main() {
 	log.Println("Running with arg map:")
 	log.Println(files.ArgMap)
 	files.LoadConfig()
+
+	// Default buffer size is 5
+	if files.RuntimeConfig.Buffers == 0 {
+		files.RuntimeConfig.Buffers = 3
+	}
+
 	rand.Seed(time.Now().UTC().UnixNano())
 	files.InitSearchBuffers()
 	// files.InitPrintBuffers()

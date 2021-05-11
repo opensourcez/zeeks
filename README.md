@@ -14,9 +14,6 @@ This tool has the ability to slowly walk directories in order not to spike netwo
 
 
 # todo
-4. Create network drive and test if file is fetched more then once on multiple open.
-4.1. if file is not opened more then once, we can run all kinds of cli things on it. Even in slow mode.
-6. Run cli stuff like b64 on matches..
 7. move meta data to sqlite ? https://github.com/volatiletech/sqlboiler
 
 # Config Format
@@ -41,6 +38,13 @@ This is the main configuration file that will be referenced in the --config flag
     // If you want to search inside the local copy of the file when possible.
     // This only works if the output path matches your previous searches
     "preferLocalFiles": true,
+
+    // How many files do we want to open at a time
+    "buffers": 5,
+
+    // How many MILLISECONDS do we want to wait between reading files
+    // This timer is applied to each buffer individually
+    "timeout": 1000,
 
      // Pre parse the file with a cli.
      // This parsing step will REPLACE the normal step where the file is opened and read line by line.
@@ -77,21 +81,6 @@ This kind of config file is a "search config" one or more of these configs can b
 ```
 # flags
 ```
-// only config
-$ zeeks --config=[file].conf [directory]
-
-// config with flags
-// flags don't overwrite, they add extra checks
-$ zeeks --config=[file].conf --strings=memory [directory]
-$ zeeks --config=[file].conf --contains=[string] [directory]
-$ zeeks --config=[file].conf --bytes=[string] [directory]
-$ zeeks --config=[file].conf --regexp=[string] [directory]
-
-// no config
-$ zeeks --strings=disk --contains="meow" --regexp="" --bytes=0x10
-
-// Configuring search speed
-// --concurrent controls the number of files we can open at a time
-// --timeout control the time in MILLISECONDS each concurrent reader will wait between opening files
-$ zeeks --concurrent=10 --timeout=200 --config=[file].conf [directory]
+// Running only with a config
+$ zeeks --config=[file].conf --outputDir=[directory]  --dir=[directory]
 ```
