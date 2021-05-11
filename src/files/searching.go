@@ -44,7 +44,7 @@ func processSearchBuffer(index int) {
 	for {
 		time.Sleep(duration * time.Millisecond)
 		// TODO enable throttling for checks
-		Search(<-searchBufferMap[index])
+		Process(<-searchBufferMap[index])
 	}
 }
 
@@ -56,7 +56,7 @@ func RunExec(cmd string, value string) string {
 	return string(out)
 }
 
-func Search(v File) {
+func Process(v File) {
 	var file *os.File
 	var readyToUnlock bool
 	defer func() {
@@ -82,21 +82,17 @@ func Search(v File) {
 		return
 	}
 
-	// if the file is 200mb or bigger, we continue
 	if stat.Size() > RuntimeConfig.MaxFileSize*1000000 {
 		readyToUnlock = true
 		return
 	}
 
-	// ...
 	for _, x := range RuntimeConfig.Ignore {
 		if strings.Contains(v.Name, x) {
 			readyToUnlock = true
 			return
 		}
 	}
-	// TODO.. detect binary file and open with strings to get output
-	// note: don't forget to disable the file open below if it's a binary..
 
 	var foundKeyword = false
 	var preProcessing = make(map[string]string)
@@ -126,12 +122,16 @@ func Search(v File) {
 		}
 	}
 
-	log.Println("O:", v.Name)
 	file, err = os.Open(v.Name)
 	if err != nil {
 		log.Println("Can not open file", v.Name, err)
 		readyToUnlock = true
 		return
+	}
+
+	localFile := OpenFile(MakePath(v.Name))
+	if RuntimeConfig.SaveAllFiles {
+		SaveFile(file, localFile)
 	}
 
 	scanner := bufio.NewScanner(file)
@@ -143,7 +143,6 @@ func Search(v File) {
 		lineBytes = scanner.Bytes()
 		for _, c := range RuntimeConfig.ParsedConfigs {
 			if c.Parse != "" {
-				// log.Println("skipping", c.Parse, c)
 				continue
 			}
 			match := FindMatch(c, &v, lineNumber, line, lineBytes, "file")
@@ -155,6 +154,10 @@ func Search(v File) {
 	}
 
 	if foundKeyword {
+		if RuntimeConfig.SaveMatchedFiles && !RuntimeConfig.SaveAllFiles {
+			SaveFile(file, localFile)
+		}
+
 		fileBufferMap[rand.Intn(len(fileBufferMap))] <- v
 	} else {
 		readyToUnlock = true
@@ -202,6 +205,7 @@ func WalkDirectories(dir string) {
 
 			if !info.IsDir() {
 				GlobalWaitGroup.Add(1)
+
 				searchBufferMap[rand.Intn(len(searchBufferMap))] <- File{
 					Name:    osPathname,
 					IsDir:   info.IsDir(),

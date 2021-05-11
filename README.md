@@ -14,6 +14,7 @@ This tool has the ability to slowly walk directories in order not to spike netwo
 4. Create network drive and test if file is fetched more then once on multiple open.
 4.1. if file is not opened more then once, we can run all kinds of cli things on it. Even in slow mode.
 6. Run cli stuff like b64 on matches..
+7. move meta data to sqlite ? https://github.com/volatiletech/sqlboiler
 
 
 # what to keep for later

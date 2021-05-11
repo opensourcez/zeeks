@@ -9,6 +9,11 @@ import (
 var GlobalWaitGroup = sync.WaitGroup{}
 var RuntimeConfig *RunConfig
 var ArgMap = make(map[string]string)
+var MATCH_POSTFIX = "-matches"
+
+func GetMatchPath(originalPath string) string {
+	return originalPath + "-" + MATCH_POSTFIX
+}
 
 // File ...
 type File struct {
@@ -37,12 +42,14 @@ func (f *File) Print() {
 
 // Config ...
 type RunConfig struct {
-	Ignore        []string `json:"ignore"`
-	MaxFileSize   int64    `json:"maxFileSize"`
-	Configs       []string `json:"configs"`
-	Strings       bool     `json:"strings"`
-	ParsedConfigs []*SearchConfig
-	Parse         string `json:"parse"`
+	Ignore           []string `json:"ignore"`
+	MaxFileSize      int64    `json:"maxFileSize"`
+	Configs          []string `json:"configs"`
+	Strings          bool     `json:"strings"`
+	ParsedConfigs    []*SearchConfig
+	Parse            string `json:"parse"`
+	SaveAllFiles     bool   `json:"saveAllFiles"`
+	SaveMatchedFiles bool   `json:"saveMatchedFiles"`
 }
 
 type SearchConfig struct {
