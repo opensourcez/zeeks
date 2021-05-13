@@ -58,12 +58,10 @@ type RunConfig struct {
 }
 
 type SearchConfig struct {
-	Ignore      []string `json:"ignore"`
-	MaxFileSize int64    `json:"maxFileSize"`
-	String      string   `json:"string"`
-	Bytes       []int    `json:"bytes"`
-	ByteSlice   []byte
-	Regexp      string `json:"regexp"`
-	Prefix      string `json:"prefix"`
-	Parse       string `json:"parse"`
+	String    string `json:"string"`
+	Bytes     []int  `json:"bytes"`
+	ByteSlice []byte
+	Regexp    string `json:"regexp"`
+	Prefix    string `json:"prefix"`
+	Parse     string `json:"parse"`
 }

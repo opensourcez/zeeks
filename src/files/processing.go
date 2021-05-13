@@ -7,13 +7,12 @@ import (
 	"math/rand"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"regexp"
 	"runtime/debug"
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/karrick/godirwalk"
 )
 
 var searchBufferMap = make(map[int]chan File)
@@ -30,8 +29,8 @@ func InitSearchBuffers() {
 func processSearchBuffer(index int) {
 	duration := time.Duration(RuntimeConfig.Timeout / 2)
 	for {
-		time.Sleep(duration * time.Millisecond)
 		Process(<-searchBufferMap[index])
+		time.Sleep(duration * time.Millisecond)
 	}
 }
 
@@ -229,22 +228,27 @@ func WalkDirectories(dir string) {
 
 	duration := time.Duration(RuntimeConfig.Timeout)
 
-	_ = godirwalk.Walk(dir, &godirwalk.Options{
-		Callback: func(osPathname string, info *godirwalk.Dirent) error {
-			time.Sleep(duration * time.Millisecond)
-
-			if !info.IsDir() {
-				GlobalWaitGroup.Add(1)
-				searchBufferMap[rand.Intn(len(searchBufferMap))] <- File{
-					Name:    osPathname,
-					IsDir:   info.IsDir(),
-					Results: SearchResults{},
-				}
+	err := filepath.WalkDir(dir, func(path string, d os.DirEntry, err error) error {
+		log.Println(d)
+		if !d.IsDir() {
+			GlobalWaitGroup.Add(1)
+			searchBufferMap[rand.Intn(len(searchBufferMap))] <- File{
+				Name:    path,
+				IsDir:   d.IsDir(),
+				Results: SearchResults{},
 			}
+			time.Sleep(duration * time.Millisecond)
+		} else {
+			if strings.Contains(path, ".git") {
+				log.Println("skipping...", path)
+				return filepath.SkipDir
+			}
+		}
 
-			return nil
-		},
-		Unsorted: true,
+		return nil
 	})
+	if err != nil {
+		panic(err)
+	}
 
 }

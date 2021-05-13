@@ -14,6 +14,7 @@ import (
 func main() {
 
 	runtime.GOMAXPROCS(runtime.NumCPU())
+	rand.Seed(time.Now().UTC().UnixNano())
 	parseArguments(os.Args[1:])
 
 	// set argument defaults
@@ -31,7 +32,6 @@ func main() {
 		files.RuntimeConfig.Buffers = 3
 	}
 
-	rand.Seed(time.Now().UTC().UnixNano())
 	files.InitSearchBuffers()
 	// files.InitPrintBuffers()
 	files.InitFileBuffer()

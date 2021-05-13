@@ -66,12 +66,6 @@ This kind of config file is a "search config" one or more of these configs can b
     // Matching with a regexp
     "regexp":"\\beyJhbGciOi.*\\b",
 
-    // Files to ignore for this specific search
-    "ignore":[".exe",".gitignore","etc.."]
-
-    // The maximum file size for this specific search
-    "maxFileSize":1000,
-
     // A prefix that will be added to each match, we recommend making it short but descriptive.  
     "prefix": "SEARCH TAG"
 
