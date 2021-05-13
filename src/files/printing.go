@@ -1,8 +1,6 @@
 package files
 
-import (
-	"github.com/fatih/color"
-)
+import "log"
 
 var printBufferMap = make(map[int]chan File)
 
@@ -18,8 +16,8 @@ func processPrintBuffer(index int) {
 	var file File
 	for {
 		file = <-printBufferMap[index]
+		log.Println(file)
 		// log.Println("WE FOUND THE WORD IN FILE:", file.Name)
-		color.Green("FILE: " + file.Name)
 		// for i, v := range file.Results.Hits {
 
 		// 	fmt.Println(color.GreenString("("+i+"): ") + v)
