@@ -25,13 +25,14 @@ This is the main configuration file that will be referenced in the --config flag
         ],
 
     // Files with these strings in the name will be ignore by the search
-    "ignore":[".exe", ".gitignore", ".git", "etc...]
+    "ignoreFiles":[".exe", ".gitignore"]
+    "ignoreFolders":[".git","vendor"]
 
     // The maximum file size in MB
     "maxFileSize":1000,
     
     // Save all files to the output directory
-    "saveMatchedFiles": true,
+    "saveAllFiles": true,
 
     // Save files to the output directory that match your search criteria
     "saveMatchedFiles": true,
