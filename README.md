@@ -7,11 +7,6 @@ This tool has the ability to slowly walk directories in order not to spike netwo
 ## Concurrency
 ....
 
-## 
-
-# Notes
-2. IP6REGXP: https://stackoverflow.com/questions/53497/regular-expression-that-matches-valid-ipv6-addresses
-
 
 # todo
 7. move meta data to sqlite ? https://github.com/volatiletech/sqlboiler
@@ -34,6 +29,12 @@ This is the main configuration file that will be referenced in the --config flag
 
     // The maximum file size in MB
     "maxFileSize":1000,
+    
+    // Save all files to the output directory
+    "saveMatchedFiles": true,
+
+    // Save files to the output directory that match your search criteria
+    "saveMatchedFiles": true,
     
     // If you want to search inside the local copy of the file when possible.
     // This only works if the output path matches your previous searches

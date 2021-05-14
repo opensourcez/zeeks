@@ -44,7 +44,8 @@ func (f *File) Print() {
 
 // Config ...
 type RunConfig struct {
-	Ignore           []string `json:"ignore"`
+	IgnoreFiles      []string `json:"ignoreFiles"`
+	IgnoreFolders    []string `json:"ignoreFolders"`
 	MaxFileSize      int64    `json:"maxFileSize"`
 	Configs          []string `json:"configs"`
 	Strings          bool     `json:"strings"`

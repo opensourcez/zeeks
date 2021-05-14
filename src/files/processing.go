@@ -77,7 +77,7 @@ func Process(v File) {
 		return
 	}
 
-	for _, x := range RuntimeConfig.Ignore {
+	for _, x := range RuntimeConfig.IgnoreFiles {
 		if strings.Contains(v.Name, x) {
 			readyToUnlock = true
 			return
@@ -239,9 +239,10 @@ func WalkDirectories(dir string) {
 			}
 			time.Sleep(duration * time.Millisecond)
 		} else {
-			if strings.Contains(path, ".git") {
-				log.Println("skipping...", path)
-				return filepath.SkipDir
+			for _, x := range RuntimeConfig.IgnoreFolders {
+				if strings.Contains(path, x) {
+					return filepath.SkipDir
+				}
 			}
 		}
 

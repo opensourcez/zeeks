@@ -1,4 +1,0 @@
-{
-    "ignore":[".gitinore", ".exe",".git"],
-    "maxFileSize":20
-}
