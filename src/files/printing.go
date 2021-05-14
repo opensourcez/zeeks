@@ -12,16 +12,10 @@ func InitPrintBuffers() {
 }
 
 func processPrintBuffer(index int) {
-	// log.Println("Starting print buffer nr:", index)
 	var file File
 	for {
 		file = <-printBufferMap[index]
 		log.Println(file)
-		// log.Println("WE FOUND THE WORD IN FILE:", file.Name)
-		// for i, v := range file.Results.Hits {
-
-		// 	fmt.Println(color.GreenString("("+i+"): ") + v)
-		// }
 		GlobalWaitGroup.Done()
 	}
 }
