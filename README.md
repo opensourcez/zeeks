@@ -1,6 +1,8 @@
 # ZEEKS
 A tool for searching for keywords, regexp and more inside of large directories. This tool is still a work in progress and anyone that wants to contribue can fork and PR.
 
+## Big shoutout to Niels who made Yar, wich is where we got most of the regxp rules https://github.com/nielsing/yar
+
 ## Slow mode
 This tool has the ability to slowly walk directories in order not to spike network traffic on network mounted volumes. This option is meant to enabled a stealth sreach.
 
