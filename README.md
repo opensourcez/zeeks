@@ -1,5 +1,6 @@
 # ZEEKS
-A tool for searching for keywords, regexp and more inside of large directories. This tool is still a work in progress and anyone that wants to contribue can fork and PR.
+A tool for searching for keywords, regexp and more in files on network or local drives. 
+This tool is still a work in progress and anyone that wants to contribue can fork and PR.
 
 ## Big shoutout to Niels who made Yar, wich is where we got most of the regxp rules https://github.com/nielsing/yar
 
