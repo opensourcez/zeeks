@@ -4,7 +4,7 @@ A tool for searching for keywords, regexp and more inside of large directories. 
 ## Big shoutout to Niels who made Yar, wich is where we got most of the regxp rules https://github.com/nielsing/yar
 
 ## Slow mode
-This tool has the ability to slowly walk directories in order not to spike network traffic on network mounted volumes. This option is meant to enabled a stealth sreach.
+This tool has the ability to slowly walk directories in order not to spike network traffic on network mounted volumes. This option is meant to enabled a stealth search which is preffered by cyber security professionals.
 
 ## Concurrency
 ....
