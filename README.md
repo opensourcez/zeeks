@@ -7,13 +7,6 @@ This tool is still a work in progress and anyone that wants to contribue can for
 ## Slow mode
 This tool has the ability to slowly walk directories in order not to spike network traffic on network mounted volumes. This option is meant to enabled a stealth search which is preffered by cyber security professionals.
 
-## Concurrency
-....
-
-
-# todo
-7. move meta data to sqlite ? https://github.com/volatiletech/sqlboiler
-
 # Config Format
 ## JSON Runtime Config
 This is the main configuration file that will be referenced in the --config flag
